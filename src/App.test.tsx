@@ -9,9 +9,4 @@ describe('App', () => {
     })
     expect(h1Element).toBeInTheDocument()
   })
-
-  const buttonElement = screen.getByRole('button', {
-    name: 'Hello World',
-  })
-  expect(buttonElement).not.toBeEnabled()
 })
