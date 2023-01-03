@@ -1,21 +1,16 @@
 import Layout from '../components/Layout/Layout'
-import cn from 'clsx'
 import Login from '../components/Form/Login/Login'
 import { useAuthStateContext } from '@/context/AuthContext'
-import Chat from '@/Chat/Chat'
+import UserList from '@/components/UserList/UserList'
 
 const HomePage = () => {
   const session = useAuthStateContext()
 
   return (
     <Layout>
-      <main
-        className={cn(
-          `font-inter bg-gradient-to-tr from-bg-primary to-bg-secondary w-full min-h-screen flex justify-center items-center text-text-primary`
-        )}
-      >
+      <main className='flex items-center justify-center w-full min-h-screen font-inter text-text-primary'>
         {session.status === 'authenticated' ? (
-          <Chat />
+          <UserList />
         ) : session.status === 'unauthenticated' ? (
           <Login />
         ) : (

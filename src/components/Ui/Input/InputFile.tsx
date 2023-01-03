@@ -1,4 +1,5 @@
 import React from 'react'
+import { FieldError, Merge } from 'react-hook-form'
 
 interface InputFileProps {
   id: string
@@ -8,7 +9,7 @@ interface InputFileProps {
   multiple?: boolean
   files?: File[]
   disabled?: boolean
-  error?: string
+  error?: Merge<FieldError, (FieldError | undefined)[]> | undefined
 }
 
 const InputFile = React.forwardRef<HTMLInputElement, InputFileProps>(
@@ -41,7 +42,6 @@ const InputFile = React.forwardRef<HTMLInputElement, InputFileProps>(
           data-testid='file-input'
           className='hidden'
           id={id}
-          /* name={name} */
           accept={accept}
           type='file'
           multiple={multiple}
@@ -49,7 +49,7 @@ const InputFile = React.forwardRef<HTMLInputElement, InputFileProps>(
           {...props}
           ref={ref}
         />
-        {error && <span className='text-red-500 text-sm'>{error}</span>}
+        {error && <span className='text-red-500 text-sm'>{error.message}</span>}
       </div>
     )
   }

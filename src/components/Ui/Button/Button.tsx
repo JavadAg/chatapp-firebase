@@ -7,12 +7,15 @@ interface ButtonProps {
 }
 
 const Button = (props: ButtonProps) => {
-  const { name, icon } = props
+  const { name, icon, onClick } = props
 
   return (
-    <div>
-      <button>{name}</button>
-    </div>
+    <button
+      className='h-8 px-2 bg-main-secondary rounded-2xl'
+      onClick={onClick}
+    >
+      {name}
+    </button>
   )
 }
 

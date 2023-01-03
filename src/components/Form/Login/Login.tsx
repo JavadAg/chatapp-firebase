@@ -36,7 +36,7 @@ const Login = () => {
   const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
     await handleAuth({ data, isLogin })
       .then((user) => {
-        toast.success(user.email)
+        toast.success(`Welcome ${user?.displayName}`)
       })
       .catch((error) => {
         toast.error(error.message)
@@ -50,7 +50,7 @@ const Login = () => {
   return (
     <div className='flex flex-col items-center justify-center gap-6 p-4 mx-2 bg-main-primary rounded-2xl w-96'>
       <div className='flex flex-col items-center justify-center gap-2'>
-        <Logo src={ChattyLogo} alt='chatty-logo' />
+        <Logo src={ChattyLogo} alt='chatty-logo' size='w-12' />
         <h1 className='text-xl font-bold'>Welcome to Chatty</h1>
         <span className='text-sm text-center text-text-secondary'>
           {isLogin
@@ -72,7 +72,7 @@ const Login = () => {
           label='Email'
           disabled={isLoading}
           {...register('email')}
-          error={errors?.email?.message}
+          error={errors?.email}
         />
         {!isLogin && (
           <InputField
@@ -84,7 +84,7 @@ const Login = () => {
             label='Name'
             disabled={isLoading}
             {...register('name')}
-            error={errors?.name?.message}
+            error={errors?.name}
           />
         )}
 
@@ -97,7 +97,7 @@ const Login = () => {
           label='Password'
           disabled={isLoading}
           {...register('password')}
-          error={errors?.password?.message}
+          error={errors?.password}
         />
         {!isLogin && (
           <InputFile
@@ -109,7 +109,7 @@ const Login = () => {
             disabled={isLoading}
             files={watch('avatar')}
             {...register('avatar')}
-            error={errors?.avatar?.message}
+            error={errors?.avatar}
           />
         )}
         {isLogin && (

@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import { FieldError } from 'react-hook-form'
 import { RiEyeCloseLine, RiEyeLine } from 'react-icons/ri'
 
 interface InputFieldProps {
@@ -9,9 +10,10 @@ interface InputFieldProps {
   minLength?: number
   maxLength?: number
   value?: string
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   required?: boolean
   disabled?: boolean
-  error?: string
+  error?: FieldError | undefined
 }
 
 const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
@@ -23,7 +25,7 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
       placeholder,
       minLength,
       maxLength,
-      /* value, */
+      onChange,
       required,
       disabled,
       error,
@@ -53,13 +55,13 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
         ) : null}
         <div className='relative flex items-center justify-center w-full gap-1'>
           <input
-            className='w-full p-1 px-2 text-sm rounded-3xl placeholder:text-text-secondary/50 outline-purple-200'
+            className='w-full h-8 px-2 text-sm rounded-3xl placeholder:text-text-secondary/50 outline-purple-200'
             id={id}
             minLength={minLength}
             maxLength={maxLength}
+            onChange={onChange}
             type={computedType()}
             placeholder={placeholder}
-            /* value={value} */
             required={required}
             disabled={disabled}
             {...props}
@@ -77,9 +79,7 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
             </button>
           )}
         </div>
-        {error && (
-          <span className='text-red-500 text-sm'>This field is required</span>
-        )}
+        {error && <span className='text-sm text-red-500'>{error.message}</span>}
       </div>
     )
   }

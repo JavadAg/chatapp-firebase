@@ -8,12 +8,12 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const session = useAuthStateContext()
 
   return (
-    <>
+    <div className='bg-gradient-to-tr from-bg-primary to-bg-secondary'>
       {session.status === 'loading' ? (
         <div>Loading...</div>
       ) : (
         <>
-          <Header />
+          {session.status === 'authenticated' ? <Header /> : null}
           {children}
           <ToastContainer
             position='bottom-right'
@@ -31,7 +31,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
           />
         </>
       )}
-    </>
+    </div>
   )
 }
 

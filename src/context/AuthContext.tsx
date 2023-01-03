@@ -22,7 +22,7 @@ export default function AuthStateProvider({
   })
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setAuthState({
           user,
@@ -34,6 +34,8 @@ export default function AuthStateProvider({
         })
       }
     })
+
+    return unsubscribe
   }, [])
 
   return (

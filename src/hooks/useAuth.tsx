@@ -2,12 +2,14 @@ import { useState } from 'react'
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
   updateProfile,
   User,
 } from 'firebase/auth'
-import { auth } from '@/services/firebase'
+import { auth, db } from '@/services/firebase'
 import { useStorage } from './useStorage'
 import { useFirestore } from './useFirestore'
+import { collection, getDocs, limit, query, where } from 'firebase/firestore'
 
 interface AuthProps {
   email: string
@@ -43,22 +45,36 @@ export const useAuth = () => {
     setIsLoading(true)
 
     try {
+      if (authType === createUserWithEmailAndPassword) {
+        const q = query(
+          collection(db, 'users'),
+          where('displayName', '==', name),
+          limit(1)
+        )
+        const querySnapshot = await getDocs(q)
+        querySnapshot.forEach(() => {
+          throw { code: 'Name already exists' }
+        })
+      }
       const res = await authType(auth, email, password)
 
       if (authType === createUserWithEmailAndPassword) {
         let imageURL
-        if (avatar) {
+
+        if (avatar && avatar.length > 0) {
           await handleUpload(avatar[0]).then(
             (avatarURL) => (imageURL = avatarURL)
           )
         }
         await updateProfile(res.user, {
           displayName: name,
-          photoURL: imageURL,
+          photoURL: avatar && avatar.length > 0 ? imageURL : '',
         })
+
         await handleStore(res.user)
       }
       setUser(res.user)
+
       return res.user
     } catch (error) {
       const errorCode = error as Error
@@ -67,5 +83,16 @@ export const useAuth = () => {
       setIsLoading(false)
     }
   }
-  return { user, handleAuth, isLoading }
+
+  const logout = async () => {
+    try {
+      const res = await signOut(auth)
+      return res
+    } catch (error) {
+      const errorCode = error as Error
+      throw new Error(errorCode.code)
+    }
+  }
+
+  return { user, handleAuth, isLoading, logout }
 }
