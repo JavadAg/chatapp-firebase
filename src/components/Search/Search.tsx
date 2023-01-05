@@ -1,51 +1,52 @@
-import { useState } from 'react'
+import { useRef } from 'react'
 import InputField from '../Ui/Input/InputField'
-import {
-  collection,
-  DocumentData,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore'
-import { db } from '@/services/firebase'
-import UserList from '../UserList/UserList'
 import { useDebounce } from '@/hooks/useDebounce'
+import { toast } from 'react-toastify'
+import { useFirestore } from '@/hooks/useFireStore'
+import useStore from '@/store/useStore'
 
 const Search = () => {
-  const [searchResult, setSearchResult] = useState<DocumentData[]>([])
-
-  const debouncedValue = useDebounce((value: string) => handleSearch(value))
+  const searchTerm = useRef<HTMLInputElement>(null)
+  const debounceFn = useDebounce((value: string) => handleSearch(value))
+  const { handleGet } = useFirestore()
+  const setSearchResult = useStore((state) => state.setResult)
+  const clearResult = useStore((state) => state.clearResult)
 
   const handleSearch = async (value: string) => {
-    debouncedValue
-
+    console.log(value)
     if (value.length > 0) {
-      const q = query(
-        collection(db, 'users'),
-        where('displayName', '==', value)
-      )
-      const querySnapshot = await getDocs(q)
-      querySnapshot.forEach((doc) => {
-        setSearchResult((current) => [...current, doc.data()])
-      })
+      handleGet('users', 'displayName', '==', value)
+        .then((results) => {
+          if (typeof results !== 'string') {
+            results.map((result) => {
+              setSearchResult(result.data())
+            })
+          } else {
+            toast.error(results)
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+          toast.error(error)
+        })
     }
   }
 
+  const handleOnChange = (value: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    if (searchTerm.current!.value.length == 0) clearResult()
+    debounceFn(value)
+  }
+
   return (
-    <div className='flex flex-col items-center justify-center flex-1 w-full '>
+    <div className='flex flex-col items-center justify-center flex-1 w-full'>
       <InputField
         type='search'
         id='search-input'
         placeholder='Search'
-        onChange={(e) => debouncedValue(e.target.value)}
+        ref={searchTerm}
+        onChange={(e) => handleOnChange(e.target.value)}
       />
-      <div className='absolute top-0 left-0 right-0 flex flex-col items-start justify-start flex-1 w-full mt-12'>
-        {searchResult.length > 0 ? (
-          <UserList data={searchResult} onClick={() => setSearchResult([])} />
-        ) : (
-          ''
-        )}
-      </div>
     </div>
   )
 }

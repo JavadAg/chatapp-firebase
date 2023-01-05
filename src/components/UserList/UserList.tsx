@@ -1,6 +1,6 @@
 import { DocumentData } from 'firebase/firestore'
 import React, { MouseEventHandler } from 'react'
-import ListItem from '../Ui/List/ListItem'
+import ListItem from './ListItem/ListItem'
 
 interface UserListProps {
   data: DocumentData[]
@@ -8,7 +8,6 @@ interface UserListProps {
 }
 
 const UserList: React.FC<UserListProps> = ({ data, onClick }) => {
-  console.log(data)
   return (
     <ul className='flex flex-col items-center self-start justify-start w-full h-full gap-6 p-2 bg-main-primary'>
       {data?.length > 0 &&

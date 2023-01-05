@@ -9,15 +9,14 @@ const ListItem = ({
   data: DocumentData
   onClick: MouseEventHandler<HTMLLIElement> | undefined
 }) => {
-  console.log(data)
   return (
     <li
       onClick={onClick}
       className='flex items-center justify-between w-full gap-3'
     >
-      <div>
+      <div className='flex justify-center items-center'>
         <img
-          className='w-12 h-12 rounded-full'
+          className='w-12 h-12 rounded-full object-cover'
           src={data.photoURL ?? Avatar}
           alt='avatar'
         />

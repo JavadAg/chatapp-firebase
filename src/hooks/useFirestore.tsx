@@ -1,6 +1,15 @@
 import { db } from '@/services/firebase'
 import { User } from 'firebase/auth'
-import { doc, setDoc } from 'firebase/firestore'
+import {
+  collection,
+  doc,
+  FieldPath,
+  getDocs,
+  query,
+  setDoc,
+  where,
+  WhereFilterOp,
+} from 'firebase/firestore'
 
 interface Error {
   code: string
@@ -8,7 +17,7 @@ interface Error {
 }
 
 export const useFirestore = () => {
-  const handleStore = async (user: User) => {
+  const handleSet = async (user: User) => {
     try {
       await setDoc(doc(db, 'users', user.uid), {
         uid: user.uid,
@@ -22,5 +31,28 @@ export const useFirestore = () => {
     }
   }
 
-  return { handleStore }
+  const handleGet = async (
+    collectionName: string,
+    fieldPath: string | FieldPath,
+    operationStr: WhereFilterOp,
+    filterValue: unknown
+  ) => {
+    try {
+      const q = query(
+        collection(db, collectionName),
+        where(fieldPath, operationStr, filterValue)
+      )
+
+      const querySnapshot = await getDocs(q)
+      if (querySnapshot.empty) {
+        return 'No results found'
+      } else {
+        return querySnapshot.docs
+      }
+    } catch (error) {
+      throw new Error((error as { message: string; code: string }).message)
+    }
+  }
+
+  return { handleGet, handleSet }
 }

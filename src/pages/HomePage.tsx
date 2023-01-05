@@ -1,17 +1,17 @@
 import Layout from '../components/Layout/Layout'
 import Login from '../components/Form/Login/Login'
-import { useAuthStateContext } from '@/context/AuthContext'
-import UserList from '@/components/UserList/UserList'
+import ChatList from '@/components/ChatList/ChatList'
+import useStore from '@/store/useStore'
 
 const HomePage = () => {
-  const session = useAuthStateContext()
+  const status = useStore((state) => state.status)
 
   return (
     <Layout>
       <main className='flex items-center justify-center w-full min-h-screen font-inter text-text-primary'>
-        {session.status === 'authenticated' ? (
-          <UserList />
-        ) : session.status === 'unauthenticated' ? (
+        {status === 'authenticated' ? (
+          <ChatList />
+        ) : status === 'unauthenticated' ? (
           <Login />
         ) : (
           ''

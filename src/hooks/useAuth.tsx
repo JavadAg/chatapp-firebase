@@ -8,7 +8,7 @@ import {
 } from 'firebase/auth'
 import { auth, db } from '@/services/firebase'
 import { useStorage } from './useStorage'
-import { useFirestore } from './useFirestore'
+import { useFirestore } from './useFireStore'
 import { collection, getDocs, limit, query, where } from 'firebase/firestore'
 
 interface AuthProps {
@@ -27,7 +27,7 @@ export const useAuth = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [user, setUser] = useState<User>()
   const { handleUpload } = useStorage()
-  const { handleStore } = useFirestore()
+  const { handleSet } = useFirestore()
 
   const handleAuth = async ({
     data,
@@ -71,7 +71,7 @@ export const useAuth = () => {
           photoURL: avatar && avatar.length > 0 ? imageURL : '',
         })
 
-        await handleStore(res.user)
+        await handleSet(res.user)
       }
       setUser(res.user)
 

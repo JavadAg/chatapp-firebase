@@ -5,5 +5,5 @@ export const useDebounce = (
   fnToDebounce: (value: string) => void,
   duration = 500
 ) => {
-  return useCallback(debounce(fnToDebounce, duration), [fnToDebounce, duration])
+  return useCallback(debounce(fnToDebounce, duration), [fnToDebounce])
 }
