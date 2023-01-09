@@ -45,11 +45,7 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
     return (
       <div className='flex flex-col items-center justify-center w-full gap-1'>
         {label ? (
-          <label
-            data-testid='input-label'
-            htmlFor={id}
-            className='self-start text-sm font-semibold'
-          >
+          <label htmlFor={id} className='self-start text-sm font-semibold'>
             {label}
           </label>
         ) : null}
@@ -72,7 +68,6 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
               type='button'
               className='absolute text-purple-300 right-1.5'
               aria-label='Reveal Password'
-              data-testid='reveal-password-button'
               onClick={() => setShowPassword((prev) => !prev)}
             >
               {showPassword ? <RiEyeLine /> : <RiEyeCloseLine />}

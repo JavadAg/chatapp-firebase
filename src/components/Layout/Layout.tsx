@@ -8,7 +8,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const session = useAuthStateContext()
 
   return (
-    <div className='bg-gradient-to-tr from-bg-primary to-bg-secondary'>
+    <div className='bg-gradient-to-tr from-bg-primary to-bg-secondary h-screen'>
       {session.status === 'loading' ? (
         <div>Loading...</div>
       ) : (

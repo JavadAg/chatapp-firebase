@@ -1,11 +1,12 @@
 import React from 'react'
 import { FieldError, Merge } from 'react-hook-form'
-
+import cn from 'clsx'
 interface InputFileProps {
   id: string
   label?: string
   accept?: string
   icon?: JSX.Element
+  className?: string
   multiple?: boolean
   files?: File[]
   disabled?: boolean
@@ -14,7 +15,18 @@ interface InputFileProps {
 
 const InputFile = React.forwardRef<HTMLInputElement, InputFileProps>(
   (
-    { id, label, accept, icon, multiple, files, disabled, error, ...props },
+    {
+      id,
+      label,
+      accept,
+      icon,
+      multiple,
+      className,
+      files,
+      disabled,
+      error,
+      ...props
+    },
     ref
   ) => {
     const labelText = () => {
@@ -29,17 +41,17 @@ const InputFile = React.forwardRef<HTMLInputElement, InputFileProps>(
       }
     }
     return (
-      <div className='flex items-center justify-center w-full gap-1 p-1 bg-main-secondary rounded-2xl'>
-        <label
-          data-testid='file-input-label'
-          className='text-sm text-text-secondary'
-          htmlFor={id}
-        >
+      <div
+        className={cn(
+          'flex items-center justify-center w-full gap-1 p-1 bg-main-secondary rounded-2xl',
+          className
+        )}
+      >
+        <label className='text-sm text-text-secondary' htmlFor={id}>
           {labelText()}
+          {icon && <span className='text-2xl text-purple-300'>{icon}</span>}
         </label>
-        <span className='text-2xl text-purple-300'>{icon}</span>
         <input
-          data-testid='file-input'
           className='hidden'
           id={id}
           accept={accept}
@@ -49,7 +61,7 @@ const InputFile = React.forwardRef<HTMLInputElement, InputFileProps>(
           {...props}
           ref={ref}
         />
-        {error && <span className='text-red-500 text-sm'>{error.message}</span>}
+        {error && <span className='text-sm text-red-500'>{error.message}</span>}
       </div>
     )
   }

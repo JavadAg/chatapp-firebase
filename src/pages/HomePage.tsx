@@ -8,7 +8,7 @@ const HomePage = () => {
 
   return (
     <Layout>
-      <main className='flex items-center justify-center w-full min-h-screen font-inter text-text-primary'>
+      <main className='flex items-center justify-center w-full font-inter text-text-primary'>
         {status === 'authenticated' ? (
           <ChatList />
         ) : status === 'unauthenticated' ? (

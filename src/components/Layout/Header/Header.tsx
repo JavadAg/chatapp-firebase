@@ -8,7 +8,7 @@ const Header = () => {
   const handleLogout = async () => {
     await logout()
       .then(() => {
-        toast.success('Logged out successfully')
+        toast.success('Logged out')
       })
       .catch((err) => {
         toast.error(err)

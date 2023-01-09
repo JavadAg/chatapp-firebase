@@ -1,7 +1,12 @@
-import { DocumentData } from 'firebase/firestore'
+export interface UserInfo {
+  displayName: string
+  photoURL: string
+  uid: string
+  email: string
+}
 
 export interface SearchResultSlice {
-  searchResults: DocumentData[] | []
-  setResult: (result: DocumentData | []) => void
+  searchResults: UserInfo[]
+  setResult: (result: UserInfo) => void
   clearResult: () => void
 }

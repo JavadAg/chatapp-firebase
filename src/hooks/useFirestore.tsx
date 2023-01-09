@@ -1,33 +1,52 @@
 import { db } from '@/services/firebase'
-import { User } from 'firebase/auth'
 import {
   collection,
   doc,
   FieldPath,
+  FieldValue,
   getDocs,
   query,
   setDoc,
+  updateDoc,
   where,
   WhereFilterOp,
 } from 'firebase/firestore'
-
-interface Error {
-  code: string
-  message: string
-}
+import { useState } from 'react'
 
 export const useFirestore = () => {
-  const handleSet = async (user: User) => {
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleSet = async (
+    collectionName: string,
+    documentId: string,
+    data: {
+      [x: string]: FieldValue | string | unknown[]
+    }
+  ) => {
     try {
-      await setDoc(doc(db, 'users', user.uid), {
-        uid: user.uid,
-        displayName: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL,
-      })
+      setIsLoading(true)
+      await setDoc(doc(db, collectionName, documentId), data)
     } catch (error) {
-      const errorCode = error as Error
-      throw new Error(errorCode.code)
+      throw new Error((error as { message: string; code: string }).code)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleUpdate = async (
+    collectionName: string,
+    documentId: string,
+    data: {
+      [x: string]: FieldValue | string
+    }
+  ) => {
+    try {
+      setIsLoading(true)
+      await updateDoc(doc(db, collectionName, documentId), data)
+    } catch (error) {
+      throw new Error((error as { message: string; code: string }).code)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -38,21 +57,21 @@ export const useFirestore = () => {
     filterValue: unknown
   ) => {
     try {
+      setIsLoading(true)
       const q = query(
         collection(db, collectionName),
         where(fieldPath, operationStr, filterValue)
       )
 
       const querySnapshot = await getDocs(q)
-      if (querySnapshot.empty) {
-        return 'No results found'
-      } else {
-        return querySnapshot.docs
-      }
+
+      return querySnapshot.docs
     } catch (error) {
-      throw new Error((error as { message: string; code: string }).message)
+      throw new Error((error as { message: string; code: string }).code)
+    } finally {
+      setIsLoading(false)
     }
   }
 
-  return { handleGet, handleSet }
+  return { handleGet, handleSet, handleUpdate, isLoading }
 }

@@ -9,7 +9,10 @@ import { useAuth } from '@/hooks/useAuth'
 import { toast } from 'react-toastify'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ValidationSchema, validationSchema } from '@/utils/validateSchema'
+import {
+  authValidationSchema,
+  AuthValidationSchema,
+} from '@/utils/validateSchema'
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true)
@@ -21,8 +24,8 @@ const Login = () => {
     watch,
     setValue,
     formState: { errors },
-  } = useForm<ValidationSchema>({
-    resolver: zodResolver(validationSchema),
+  } = useForm<AuthValidationSchema>({
+    resolver: zodResolver(authValidationSchema),
   })
 
   useEffect(() => {
@@ -33,7 +36,7 @@ const Login = () => {
     }
   }, [isLogin])
 
-  const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
+  const onSubmit: SubmitHandler<AuthValidationSchema> = async (data) => {
     await handleAuth({ data, isLogin })
       .then((user) => {
         toast.success(`Welcome ${user?.displayName}`)
@@ -43,7 +46,7 @@ const Login = () => {
       })
   }
 
-  const handleAuthSwitch = () => {
+  const toggleAuth = () => {
     setIsLogin((prev) => !prev)
   }
 
@@ -60,7 +63,6 @@ const Login = () => {
       </div>
 
       <form
-        data-testid='auth-form'
         onSubmit={handleSubmit(onSubmit)}
         className='flex flex-col items-center justify-center w-full gap-4'
       >
@@ -122,7 +124,7 @@ const Login = () => {
           disabled={isLoading}
         />
       </form>
-      <button className='text-sm' onClick={handleAuthSwitch}>
+      <button className='text-sm' onClick={toggleAuth}>
         {isLogin ? (
           <span>
             Dont have an account ?{' '}

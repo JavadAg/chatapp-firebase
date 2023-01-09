@@ -4,6 +4,7 @@ import { useDebounce } from '@/hooks/useDebounce'
 import { toast } from 'react-toastify'
 import { useFirestore } from '@/hooks/useFireStore'
 import useStore from '@/store/useStore'
+import { UserInfo } from '@/types/search.type'
 
 const Search = () => {
   const searchTerm = useRef<HTMLInputElement>(null)
@@ -13,20 +14,18 @@ const Search = () => {
   const clearResult = useStore((state) => state.clearResult)
 
   const handleSearch = async (value: string) => {
-    console.log(value)
     if (value.length > 0) {
       handleGet('users', 'displayName', '==', value)
         .then((results) => {
-          if (typeof results !== 'string') {
+          if (results.length > 0) {
             results.map((result) => {
-              setSearchResult(result.data())
+              setSearchResult(result.data() as UserInfo)
             })
           } else {
-            toast.error(results)
+            toast.error('No results found')
           }
         })
         .catch((error) => {
-          console.log(error)
           toast.error(error)
         })
     }
