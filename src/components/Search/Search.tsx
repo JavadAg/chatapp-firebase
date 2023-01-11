@@ -2,14 +2,14 @@ import { useRef } from 'react'
 import InputField from '../Ui/Input/InputField'
 import { useDebounce } from '@/hooks/useDebounce'
 import { toast } from 'react-toastify'
-import { useFirestore } from '@/hooks/useFireStore'
 import useStore from '@/store/useStore'
 import { UserInfo } from '@/types/search.type'
+import { useFireStore } from '@/hooks/useFireStore'
 
 const Search = () => {
   const searchTerm = useRef<HTMLInputElement>(null)
   const debounceFn = useDebounce((value: string) => handleSearch(value))
-  const { handleGet } = useFirestore()
+  const { handleGet } = useFireStore()
   const setSearchResult = useStore((state) => state.setResult)
   const clearResult = useStore((state) => state.clearResult)
   const chatList = useStore((state) => state.chatList)

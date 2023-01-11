@@ -8,8 +8,8 @@ import {
 } from 'firebase/auth'
 import { auth, db } from '@/services/firebase'
 import { useStorage } from './useStorage'
-import { useFirestore } from './useFireStore'
 import { collection, getDocs, limit, query, where } from 'firebase/firestore'
+import { useFireStore } from './useFireStore'
 
 interface AuthProps {
   email: string
@@ -27,7 +27,7 @@ export const useAuth = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [user, setUser] = useState<User>()
   const { handleUpload } = useStorage()
-  const { handleSet } = useFirestore()
+  const { handleSet } = useFireStore()
 
   const handleAuth = async ({
     data,
