@@ -40,6 +40,7 @@ const Search = () => {
   return (
     <div className='flex flex-col items-center justify-center flex-1 w-full'>
       <InputField
+        className='w-full px-2 text-sm outline-none h-9 rounded-3xl md:text-base focus:outline-purple-200 dark:focus:outline-purple-600 outline-offset-0 dark:bg-main-dark-secondary'
         type='search'
         id='search-input'
         placeholder='Search'

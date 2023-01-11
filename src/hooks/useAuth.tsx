@@ -63,7 +63,7 @@ export const useAuth = () => {
 
         if (avatar && avatar.length > 0) {
           await handleUpload(avatar[0]).then(
-            (avatarURL) => (imageURL = avatarURL)
+            async (avatarURL) => (imageURL = avatarURL)
           )
         }
         await updateProfile(res.user, {
@@ -71,7 +71,12 @@ export const useAuth = () => {
           photoURL: avatar && avatar.length > 0 ? imageURL : '',
         })
 
-        await handleSet(res.user)
+        await handleSet('users', res.user.uid, {
+          uid: res.user.uid,
+          email: res.user.email!,
+          displayName: res.user.displayName!,
+          photoURL: res.user.photoURL!,
+        })
       }
       setUser(res.user)
 

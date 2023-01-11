@@ -1,10 +1,8 @@
-import React from 'react'
-
 const SpinnerIcon = () => {
   return (
     <svg
       aria-hidden='true'
-      className='w-5 h-5 text-purple-100 animate-spin dark:text-gray-600 fill-purple-600'
+      className='w-5 h-5 text-purple-100 animate-spin fill-purple-600'
       viewBox='0 0 100 101'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'

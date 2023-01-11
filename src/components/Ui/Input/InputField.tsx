@@ -9,6 +9,7 @@ interface InputFieldProps {
   placeholder?: string
   minLength?: number
   maxLength?: number
+  className?: string
   value?: string
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   required?: boolean
@@ -45,14 +46,18 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
     return (
       <div className='flex flex-col items-center justify-center w-full gap-1'>
         {label ? (
-          <label htmlFor={id} className='self-start text-sm font-semibold'>
+          <label
+            htmlFor={id}
+            className='self-start text-sm font-semibold md:text-base'
+          >
             {label}
           </label>
         ) : null}
         <div className='relative flex items-center justify-center w-full gap-1'>
           <input
-            className='w-full h-8 px-2 text-sm rounded-3xl placeholder:text-text-secondary/50 outline-purple-200'
+            className='w-full h-8 px-2 text-sm outline-none rounded-3xl placeholder:text-text-secondary/50 focus:outline-purple-200 md:text-base dark:placeholder:text-text-dark-secondary/50 dark:bg-main-dark-secondary focus:dark:outline-purple-600 outline-offset-0'
             id={id}
+            autoComplete='off'
             minLength={minLength}
             maxLength={maxLength}
             onChange={onChange}
@@ -74,7 +79,11 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
             </button>
           )}
         </div>
-        {error && <span className='text-sm text-red-500'>{error.message}</span>}
+        {error && (
+          <span className='text-sm text-red-500 md:text-base'>
+            {error.message}
+          </span>
+        )}
       </div>
     )
   }

@@ -1,6 +1,5 @@
 import { onAuthStateChanged } from 'firebase/auth'
 import { useEffect } from 'react'
-import AuthStateProvider from './context/AuthContext'
 import useStore from './store/useStore'
 import HomePage from './pages/HomePage'
 import { auth } from './services/firebase'
@@ -23,11 +22,7 @@ function App() {
     return unsubscribe
   }, [])
 
-  return (
-    <AuthStateProvider>
-      <HomePage />
-    </AuthStateProvider>
-  )
+  return <HomePage />
 }
 
 export default App

@@ -3,12 +3,15 @@ import { UserInfo } from './search.type'
 
 type uid = string
 
+export interface Participants {
+  uid: uid
+  photoURL: string
+  displayName: string
+}
+
 export interface ChatItem {
   id: string
-  displayName: string
-  photoURL: string
-  uid: uid
-  participants_id: uid[]
+  participants: Participants[]
   lastMessage: string
   timestamp: Timestamp
 }

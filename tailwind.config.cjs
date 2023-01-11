@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
@@ -10,12 +11,12 @@ module.exports = {
       colors: {
         'bg-primary': '#cfd9df',
         'bg-secondary': '#e2ebf0',
-        'bg-dark-primary': '#121212',
-        'bg-dark-secondary': '#000000',
+        'bg-dark-primary': '#12171A',
+        'bg-dark-secondary': '#161D21',
         'main-primary': '#F5F7FB',
-        'main-dark-primary': '#3E4756',
+        'main-dark-primary': '#282828',
         'main-secondary': '#FFFFFF',
-        'main-dark-secondary': '',
+        'main-dark-secondary': '#1D1D1D',
         purple: {
           100: '#e6dff3',
           200: '#cebfe7',
@@ -29,6 +30,8 @@ module.exports = {
         },
         'text-primary': '#333333',
         'text-secondary': '#6A6A6A',
+        'text-dark-primary': '#FAFAFA',
+        'text-dark-secondary': '#CBCBCB'
       },
     },
   },

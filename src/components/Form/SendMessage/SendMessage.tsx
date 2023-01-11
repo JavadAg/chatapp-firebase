@@ -1,8 +1,6 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import InputField from '@/components/Ui/Input/InputField'
 import InputFile from '@/components/Ui/Input/InputFile'
 import InputSubmit from '@/components/Ui/Input/InputSubmit'
-import { useFirestore } from '@/hooks/useFireStore'
 import useStore from '@/store/useStore'
 import {
   messageValidationSchema,
@@ -16,10 +14,17 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { RiAttachmentLine, RiSendPlane2Line, RiCheckLine } from 'react-icons/ri'
 import { useStorage } from '@/hooks/useStorage'
 import { toast } from 'react-toastify'
-import { ChatItem } from '@/types/chat.types'
+import { ChatItem, Participants } from '@/types/chat.types'
 import { User, UserInfo } from 'firebase/auth'
+import { useFirestore } from '@/hooks/useFireStore'
 
-const SendMessage = ({ conversationId }: { conversationId: string }) => {
+const SendMessage = ({
+  conversationId,
+  targetUser,
+}: {
+  conversationId: string
+  targetUser: Participants
+}) => {
   const [isLoading, setIsLoading] = useState(false)
   const { handleUpdate, handleSet } = useFirestore()
   const { handleUpload } = useStorage()
@@ -40,16 +45,20 @@ const SendMessage = ({ conversationId }: { conversationId: string }) => {
   })
 
   const onSubmit: SubmitHandler<MessageValidationSchema> = async (data) => {
+    setIsLoading(true)
     let messageImage
     if (data?.image?.[0]) {
       await handleUpload(data?.image?.[0])
         .then((res) => {
           messageImage = res
         })
-        .catch((error) => toast.error(error))
+        .catch((error) => {
+          toast.error(error)
+          setIsLoading(false)
+        })
     }
 
-    if ('participants_id' in activeChat!) {
+    if ('lastMessage' in activeChat!) {
       await handleUpdate('conversations', conversationId, {
         messages: arrayUnion({
           id: uuidv4(),
@@ -58,11 +67,18 @@ const SendMessage = ({ conversationId }: { conversationId: string }) => {
           sender: currentUser?.uid,
           timestamp: Timestamp.now(),
         }),
-      }).catch((error) => toast.error(error))
+      }).catch((error) => {
+        toast.error(error)
+        setIsLoading(false)
+      })
       await handleUpdate('chat-lists', conversationId, {
         lastMessage: watch('message'),
         timestamp: serverTimestamp(),
-      }).catch((error) => toast.error(error))
+      }).catch((error) => {
+        toast.error(error)
+        setIsLoading(false)
+      })
+      setIsLoading(false)
     }
     //if now conversation exists
     else {
@@ -76,29 +92,46 @@ const SendMessage = ({ conversationId }: { conversationId: string }) => {
             timestamp: Timestamp.now(),
           },
         ],
+      }).catch((error) => {
+        toast.error(error)
+        setIsLoading(false)
       })
 
       const newChatItem = {
         id: uuidv4(),
-        displayName: activeChat.displayName as string,
         lastMessage: watch('message'),
-        participants_id: [currentUser.uid, activeChat.uid],
-        photoURL: activeChat.photoURL as string,
+        participants: [
+          {
+            uid: currentUser.uid,
+            displayName: currentUser.displayName as string,
+            photoURL: currentUser.photoURL as string,
+          },
+          {
+            uid: targetUser.uid,
+            displayName: targetUser.displayName as string,
+            photoURL: targetUser.photoURL as string,
+          },
+        ],
         timestamp: serverTimestamp(),
-        uid: activeChat.uid,
       }
 
-      await handleSet('chat-lists', conversationId, newChatItem)
+      await handleSet('chat-lists', conversationId, newChatItem).catch(
+        (error) => {
+          toast.error(error)
+          setIsLoading(false)
+        }
+      )
 
       setActiveChat(newChatItem as unknown as ChatItem)
     }
     reset()
+    setIsLoading(false)
   }
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className='flex items-center justify-center p-2 bg-main-primary gap-2'
+      className='flex items-center justify-center w-full gap-2 p-2 bg-main-secondary rounded-3xl dark:bg-main-dark-secondary'
     >
       <InputField
         id='message-input'
@@ -120,7 +153,11 @@ const SendMessage = ({ conversationId }: { conversationId: string }) => {
         error={errors?.image}
         id='attachment'
       />
-      <InputSubmit name='Send' disabled={false} icon={<RiSendPlane2Line />} />
+      <InputSubmit
+        name='Send'
+        disabled={isLoading}
+        icon={<RiSendPlane2Line />}
+      />
     </form>
   )
 }

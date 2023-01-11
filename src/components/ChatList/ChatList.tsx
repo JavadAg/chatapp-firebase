@@ -5,11 +5,13 @@ import {
   collection,
   DocumentData,
   onSnapshot,
+  orderBy,
   query,
   where,
 } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+import Header from '../Layout/Header/Header'
 import Loading from '../Ui/Loading/Loading'
 import ListItem from './ListItem/ListItem'
 
@@ -23,7 +25,12 @@ const ChatList = () => {
   useEffect(() => {
     const q = query(
       collection(db, 'chat-lists'),
-      where('participants_id', 'array-contains', currentUser?.uid)
+      where('participants', 'array-contains', {
+        photoURL: currentUser?.photoURL,
+        displayName: currentUser?.displayName,
+        uid: currentUser?.uid,
+      }),
+      orderBy('timestamp', 'desc')
     )
 
     const unsub = onSnapshot(
@@ -49,21 +56,24 @@ const ChatList = () => {
   }, [currentUser?.uid])
 
   return (
-    <div className='flex flex-col items-center self-start justify-start w-full gap-6 p-2 bg-main-primary'>
-      {isLoading ? <Loading /> : ''}
-      {searchResults.length > 0 || chatList.length > 0 ? (
-        <ul className='flex flex-col items-center self-start justify-start w-full h-full gap-6 p-2 bg-main-primary'>
-          {searchResults.length > 0
-            ? searchResults.map((item) => (
-                <ListItem key={item.uid} item={item} />
-              ))
-            : chatList.map((item) => <ListItem key={item.id} item={item} />)}
-        </ul>
-      ) : (
-        <span className='w-full px-2 py-1 text-sm font-semibold text-center bg-main-secondary rounded-2xl'>
-          No chat yet!
-        </span>
-      )}
+    <div className='flex flex-col items-center justify-start max-w-[50rem] w-full min-h-screen bg-main-primary md:w-2/4 dark:bg-main-dark-primary'>
+      <Header />
+      <div className='flex flex-col items-center self-start justify-start w-full gap-6 p-2'>
+        {isLoading ? <Loading text='Loading Chatlist' /> : ''}
+        {searchResults.length > 0 || chatList.length > 0 ? (
+          <ul className='flex flex-col items-center justify-center w-full p-2 divide-y bg-main-secondary rounded-2xl dark:bg-main-dark-secondary dark:divide-neutral-800'>
+            {searchResults.length > 0
+              ? searchResults.map((item) => (
+                  <ListItem key={item.uid} item={item} />
+                ))
+              : chatList.map((item) => <ListItem key={item.id} item={item} />)}
+          </ul>
+        ) : (
+          <span className='w-full px-2 py-1 text-sm font-semibold text-center bg-main-secondary rounded-2xl md:text-base dark:bg-main-dark-secondary'>
+            No chat yet!
+          </span>
+        )}
+      </div>
     </div>
   )
 }

@@ -43,13 +43,20 @@ const InputFile = React.forwardRef<HTMLInputElement, InputFileProps>(
     return (
       <div
         className={cn(
-          'flex items-center justify-center w-full gap-1 p-1 bg-main-secondary rounded-2xl',
+          'flex items-center justify-center w-full gap-1 p-1 bg-main-secondary rounded-2xl cursor-pointer dark:bg-main-dark-secondary',
           className
         )}
       >
-        <label className='text-sm text-text-secondary' htmlFor={id}>
+        <label
+          className='flex items-center justify-center text-sm text-text-secondary md:text-base dark:text-text-dark-secondary'
+          htmlFor={id}
+        >
           {labelText()}
-          {icon && <span className='text-2xl text-purple-300'>{icon}</span>}
+          {icon && (
+            <span className='text-2xl text-purple-300 cursor-pointer hover:text-purple-400 dark:text-purple-400/60 dark:hover:text-purple-500/60'>
+              {icon}
+            </span>
+          )}
         </label>
         <input
           className='hidden'
@@ -61,7 +68,11 @@ const InputFile = React.forwardRef<HTMLInputElement, InputFileProps>(
           {...props}
           ref={ref}
         />
-        {error && <span className='text-sm text-red-500'>{error.message}</span>}
+        {error && (
+          <span className='text-sm text-red-500 md:text-base'>
+            {error.message}
+          </span>
+        )}
       </div>
     )
   }

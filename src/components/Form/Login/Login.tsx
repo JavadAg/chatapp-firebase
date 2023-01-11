@@ -51,96 +51,98 @@ const Login = () => {
   }
 
   return (
-    <div className='flex flex-col items-center justify-center gap-6 p-4 mx-2 bg-main-primary rounded-2xl w-96'>
-      <div className='flex flex-col items-center justify-center gap-2'>
-        <Logo src={ChattyLogo} alt='chatty-logo' size='w-12' />
-        <h1 className='text-xl font-bold'>Welcome to Chatty</h1>
-        <span className='text-sm text-center text-text-secondary'>
-          {isLogin
-            ? 'Enter the information you entered while registering'
-            : 'Enter the information'}
-        </span>
-      </div>
+    <div className='flex flex-col items-center justify-center h-screen px-2 w-96'>
+      <div className='flex flex-col items-center justify-center w-full gap-6 p-4 bg-main-primary rounded-2xl dark:bg-main-dark-primary'>
+        <div className='flex flex-col items-center justify-center gap-2'>
+          <Logo src={ChattyLogo} alt='chatty-logo' size='w-12' />
+          <h1 className='text-xl font-bold'>Welcome to Chatty</h1>
+          <span className='text-sm text-center text-text-secondary md:text-base dark:text-text-dark-secondary'>
+            {isLogin
+              ? 'Enter the information you entered while registering'
+              : 'Enter the information'}
+          </span>
+        </div>
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className='flex flex-col items-center justify-center w-full gap-4'
-      >
-        <InputField
-          id='email-input'
-          type='email'
-          placeholder='john@doe.com'
-          maxLength={30}
-          label='Email'
-          disabled={isLoading}
-          {...register('email')}
-          error={errors?.email}
-        />
-        {!isLogin && (
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className='flex flex-col items-center justify-center w-full gap-4'
+        >
           <InputField
-            id='name-input'
-            type='text'
-            placeholder='John Doe'
-            minLength={1}
+            id='email-input'
+            type='email'
+            placeholder='john@doe.com'
             maxLength={30}
-            label='Name'
+            label='Email'
             disabled={isLoading}
-            {...register('name')}
-            error={errors?.name}
+            {...register('email')}
+            error={errors?.email}
           />
-        )}
+          {!isLogin && (
+            <InputField
+              id='name-input'
+              type='text'
+              placeholder='John Doe'
+              minLength={1}
+              maxLength={30}
+              label='Name'
+              disabled={isLoading}
+              {...register('name')}
+              error={errors?.name}
+            />
+          )}
 
-        <InputField
-          id='password-input'
-          type='password'
-          placeholder='@#!$werwgr1234'
-          minLength={4}
-          maxLength={16}
-          label='Password'
-          disabled={isLoading}
-          {...register('password')}
-          error={errors?.password}
-        />
-        {!isLogin && (
-          <InputFile
-            id='file-input'
-            icon={<RiUser4Line />}
-            accept='image/jpg,image/jpeg,image/png,image/webp'
-            multiple={false}
-            label='Select avatar'
+          <InputField
+            id='password-input'
+            type='password'
+            placeholder='@#!$werwgr1234'
+            minLength={4}
+            maxLength={16}
+            label='Password'
             disabled={isLoading}
-            files={watch('avatar')}
-            {...register('avatar')}
-            error={errors?.avatar}
+            {...register('password')}
+            error={errors?.password}
           />
-        )}
-        {isLogin && (
-          <a className='self-end text-xs cursor-not-allowed text-text-secondary/70'>
-            Forgot password?
-          </a>
-        )}
-        <InputSubmit
-          name={isLogin ? 'Login' : 'Register'}
-          disabled={isLoading}
-        />
-      </form>
-      <button className='text-sm' onClick={toggleAuth}>
-        {isLogin ? (
-          <span>
-            Dont have an account ?{' '}
-            <span className='text-purple-500 duration-200 hover:text-purple-700'>
-              Register now
+          {!isLogin && (
+            <InputFile
+              id='file-input'
+              icon={<RiUser4Line />}
+              accept='image/jpg,image/jpeg,image/png,image/webp'
+              multiple={false}
+              label='Select avatar'
+              disabled={isLoading}
+              files={watch('avatar')}
+              {...register('avatar')}
+              error={errors?.avatar}
+            />
+          )}
+          {isLogin && (
+            <a className='self-end text-xs cursor-not-allowed text-text-secondary/70 dark:text-text-dark-secondary'>
+              Forgot password?
+            </a>
+          )}
+          <InputSubmit
+            name={isLogin ? 'Login' : 'Register'}
+            disabled={isLoading}
+          />
+        </form>
+        <button className='text-sm' onClick={toggleAuth}>
+          {isLogin ? (
+            <span>
+              Dont have an account ?{' '}
+              <span className='text-purple-500 duration-200 hover:text-purple-700 dark:hover:text-purple-400'>
+                Register now
+              </span>
             </span>
-          </span>
-        ) : (
-          <span>
-            Have an account ?{' '}
-            <span className='text-purple-500 duration-200 hover:text-purple-700'>
-              Login now
+          ) : (
+            <span>
+              Have an account ?{' '}
+              <span className='text-purple-500 duration-200 hover:text-purple-700 dark:hover:text-purple-400'>
+                Login now
+              </span>
             </span>
-          </span>
-        )}
-      </button>
+          )}
+        </button>
+      </div>
     </div>
   )
 }
