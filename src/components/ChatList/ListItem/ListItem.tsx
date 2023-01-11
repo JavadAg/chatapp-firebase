@@ -7,6 +7,7 @@ import { UserInfo } from '@/types/search.type'
 const ListItem = ({ item }: { item: ChatItem | UserInfo }) => {
   const setActiveChat = useStore((state) => state.setActiveChat)
   const currentUser = useStore((state) => state.currentUser)
+  const chatList = useStore((state) => state.chatList)
 
   const targetUser: UserInfo | Participants =
     'participants' in item
@@ -14,7 +15,17 @@ const ListItem = ({ item }: { item: ChatItem | UserInfo }) => {
       : (item as UserInfo)
 
   const toggleChatScreen = () => {
-    setActiveChat(item)
+    let chatExist
+    if ('email' in item) {
+      chatExist = chatList.filter((chat) =>
+        chat.participants.find((user) => user.uid === item.uid)
+      )[0]
+    }
+    if (chatExist) {
+      setActiveChat(chatExist)
+    } else {
+      setActiveChat(item)
+    }
   }
 
   return (

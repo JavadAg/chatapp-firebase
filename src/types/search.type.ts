@@ -1,3 +1,5 @@
+import { ChatItem } from './chat.types'
+
 export interface UserInfo {
   displayName: string
   photoURL: string
@@ -6,7 +8,7 @@ export interface UserInfo {
 }
 
 export interface SearchResultSlice {
-  searchResults: UserInfo[]
-  setResult: (result: UserInfo) => void
+  searchResults: UserInfo | ChatItem | null
+  setResult: (result: UserInfo | ChatItem) => void
   clearResult: () => void
 }

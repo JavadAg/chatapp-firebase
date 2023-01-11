@@ -1,3 +1,4 @@
+import useStore from '@/store/useStore'
 import React, { useCallback, useState } from 'react'
 import { FieldError } from 'react-hook-form'
 import { RiEyeCloseLine, RiEyeLine } from 'react-icons/ri'
@@ -35,6 +36,7 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
     ref
   ) => {
     const [showPassword, setShowPassword] = useState(false)
+    const clearResult = useStore((state) => state.clearResult)
 
     const computedType = useCallback(() => {
       if (type === 'password' && showPassword) {
@@ -68,6 +70,15 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
             {...props}
             ref={ref}
           />
+          {type === 'search' && (
+            <button
+              onClick={() => clearResult()}
+              type='reset'
+              className='absolute right-4'
+            >
+              x
+            </button>
+          )}
           {type === 'password' && (
             <button
               type='button'

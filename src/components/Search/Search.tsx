@@ -12,6 +12,7 @@ const Search = () => {
   const { handleGet } = useFirestore()
   const setSearchResult = useStore((state) => state.setResult)
   const clearResult = useStore((state) => state.clearResult)
+  const chatList = useStore((state) => state.chatList)
 
   const handleSearch = async (value: string) => {
     if (value.length > 0) {
@@ -19,7 +20,16 @@ const Search = () => {
         .then((results) => {
           if (results.length > 0) {
             results.map((result) => {
-              setSearchResult(result.data() as UserInfo)
+              const chatExist = chatList.filter((chat) =>
+                chat.participants.find(
+                  (user) =>
+                    user.uid === (result.data() as unknown as UserInfo).uid
+                )
+              )[0]
+              if (chatExist) setSearchResult(chatExist)
+              else {
+                setSearchResult(result.data() as UserInfo)
+              }
             })
           } else {
             toast.error('No results found')
@@ -38,7 +48,7 @@ const Search = () => {
   }
 
   return (
-    <div className='flex flex-col items-center justify-center flex-1 w-full'>
+    <form className='flex flex-col items-center justify-center flex-1 w-full'>
       <InputField
         className='w-full px-2 text-sm outline-none h-9 rounded-3xl md:text-base focus:outline-purple-200 dark:focus:outline-purple-600 outline-offset-0 dark:bg-main-dark-secondary'
         type='search'
@@ -47,7 +57,7 @@ const Search = () => {
         ref={searchTerm}
         onChange={(e) => handleOnChange(e.target.value)}
       />
-    </div>
+    </form>
   )
 }
 

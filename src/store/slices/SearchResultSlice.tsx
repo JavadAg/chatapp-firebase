@@ -4,11 +4,11 @@ import { StateCreator } from 'zustand'
 export const createSearchResultSlice: StateCreator<SearchResultSlice> = (
   set
 ) => ({
-  searchResults: [],
+  searchResults: null,
   setResult: (result) => {
-    set((state) => ({
-      searchResults: [...state.searchResults, result],
+    set(() => ({
+      searchResults: result,
     }))
   },
-  clearResult: () => set(() => ({ searchResults: [] })),
+  clearResult: () => set(() => ({ searchResults: null })),
 })
