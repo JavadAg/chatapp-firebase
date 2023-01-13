@@ -1,11 +1,18 @@
 import { StateCreator } from 'zustand'
 
 export interface ThemeSlice {
-  theme: boolean
-  setTheme: (theme: boolean) => void
+  theme: string
+  setTheme: () => void
 }
 
 export const createThemeSlice: StateCreator<ThemeSlice> = (set) => ({
-  theme: true,
-  setTheme: (theme) => set(() => ({ theme: !theme })),
+  theme: localStorage.getItem('theme')
+    ? JSON.stringify(localStorage.getItem('theme'))
+    : 'dark',
+  setTheme: () =>
+    set((state) =>
+      state.theme === 'dark'
+        ? (localStorage.setItem('theme', 'light'), { theme: 'light' })
+        : (localStorage.setItem('theme', 'dark'), { theme: 'dark' })
+    ),
 })

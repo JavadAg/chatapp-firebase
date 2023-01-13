@@ -57,7 +57,7 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
         ) : null}
         <div className='relative flex items-center justify-center w-full gap-1'>
           <input
-            className='w-full h-8 px-2 text-sm outline-none rounded-3xl placeholder:text-text-secondary/50 focus:outline-purple-200 md:text-base dark:placeholder:text-text-dark-secondary/50 dark:bg-main-dark-secondary focus:dark:outline-purple-600 outline-offset-0'
+            className='w-full h-8 px-2 text-sm outline-none rounded-3xl focus:outline-purple-200 md:text-base bg-main-secondary text-text-primary focus:dark:outline-purple-600 outline-offset-0'
             id={id}
             autoComplete='off'
             minLength={minLength}

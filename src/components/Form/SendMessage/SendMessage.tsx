@@ -16,7 +16,7 @@ import { useStorage } from '@/hooks/useStorage'
 import { toast } from 'react-toastify'
 import { ChatItem, Participants } from '@/types/chat.types'
 import { User, UserInfo } from 'firebase/auth'
-import { useFireStore } from '@/hooks/useFireStore'
+import { useFirestore } from '@/hooks/useFirestore'
 
 const SendMessage = ({
   conversationId,
@@ -26,7 +26,7 @@ const SendMessage = ({
   targetUser: Participants
 }) => {
   const [isLoading, setIsLoading] = useState(false)
-  const { handleUpdate, handleSet } = useFireStore()
+  const { handleUpdate, handleSet } = useFirestore()
   const { handleUpload } = useStorage()
   const currentUser = useStore((state) => state.currentUser) as User
   const activeChat = useStore((state) => state.activeChat) as

@@ -58,8 +58,8 @@ const Header = () => {
         className={cn(
           'h-8 px-2 flex relative w-8 justify-center items-center bg-main-secondary text-lg duration-300 ease-in-out rounded-full md:w-9 md:h-9 hover:bg-neutral-200 dark:bg-main-dark-secondary dark:hover:bg-neutral-600'
         )}
-        animate={theme ? 'checked' : 'unchecked'}
-        onClick={() => setTheme(theme)}
+        animate={theme === 'dark' ? 'checked' : 'unchecked'}
+        onClick={() => setTheme()}
       >
         <AnimatePresence>
           <motion.i

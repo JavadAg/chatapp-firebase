@@ -13,7 +13,7 @@ import {
 } from 'firebase/firestore'
 import { useState } from 'react'
 
-export const useFireStore = () => {
+export const useFirestore = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleSet = async (

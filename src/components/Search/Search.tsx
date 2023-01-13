@@ -4,12 +4,12 @@ import { useDebounce } from '@/hooks/useDebounce'
 import { toast } from 'react-toastify'
 import useStore from '@/store/useStore'
 import { UserInfo } from '@/types/search.type'
-import { useFireStore } from '@/hooks/useFireStore'
+import { useFirestore } from '@/hooks/useFirestore'
 
 const Search = () => {
   const searchTerm = useRef<HTMLInputElement>(null)
   const debounceFn = useDebounce((value: string) => handleSearch(value))
-  const { handleGet } = useFireStore()
+  const { handleGet } = useFirestore()
   const setSearchResult = useStore((state) => state.setResult)
   const clearResult = useStore((state) => state.clearResult)
   const chatList = useStore((state) => state.chatList)

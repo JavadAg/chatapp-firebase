@@ -9,7 +9,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const status = useStore((state) => state.status)
 
   useEffect(() => {
-    if (theme) {
+    if (theme === 'dark') {
       document.documentElement.classList.add('dark')
     } else {
       document.documentElement.classList.remove('dark')

@@ -27,7 +27,7 @@ const InputSubmit = (props: InputSubmitProps) => {
         type='submit'
         value={name}
         className={cn(
-          'font-semibold cursor-pointer text-text-primary disabled:cursor-not-allowed dark:text-text-dark-secondary',
+          'font-semibold cursor-pointer text-text-primary disabled:cursor-not-allowed dark:text-text-dark-primary',
           icon && 'hidden'
         )}
       />
