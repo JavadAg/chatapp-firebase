@@ -7,7 +7,7 @@ export interface ThemeSlice {
 
 export const createThemeSlice: StateCreator<ThemeSlice> = (set) => ({
   theme: localStorage.getItem('theme')
-    ? JSON.stringify(localStorage.getItem('theme'))
+    ? localStorage.getItem('theme')!
     : 'dark',
   setTheme: () =>
     set((state) =>
